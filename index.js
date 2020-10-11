@@ -33,12 +33,11 @@ app.get("/hello-world", (req, res) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-// I think this is needed on server to serve React file
-/*
+// Note: without this, the root will serve index.html by default
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
-*/
+
 
 const port = process.env.PORT || 5000;
 http.listen(port);
