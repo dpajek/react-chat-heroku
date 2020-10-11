@@ -11,7 +11,9 @@ const io = socketio(http);
 // Serve static React app at route directory of server
 // app.use is the middleware and applies to all, independent of call
 // points to this folder for static files
-app.use(express.static(path.join(__dirname, "client/build")));
+
+// I think this is necessary if other files are needed (maybe images? css?)
+//app.use(express.static(path.join(__dirname, "client/build")));
 
 // list for connection event
 io.on("connection", (socket) => {
@@ -33,6 +35,7 @@ app.get("/hello-world", (req, res) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
+// I think this is needed on server to serve React file
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
