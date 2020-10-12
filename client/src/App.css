@@ -12,8 +12,22 @@
   max-height: 100%;
   margin: auto;
 }
+
+.JoinRoomWrapper {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding: 10px 10px 10px 10px;
+  margin: 5px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .form {
-  background: whitesmoke;
+  background-color: whitesmoke;
   padding: 10px 10px 20px 10px;
   position: fixed;
   bottom: 0;
@@ -22,11 +36,9 @@
   height: 10vh;
   margin: auto;
 }
-.form input {
-  border: none;
-  width: 80%;
-  margin-right: 1%;
 
+input {
+  border: none;
   border-radius: 0.7em;
   padding: 0.5em;
   line-height: 1em;
@@ -36,14 +48,11 @@
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-.form input:focus {
-  outline: none;
-}
-.form button {
-  width: 18%;
+
+button {
   background: lightgray;
   border: none;
-  
+
   border-radius: 0.7em;
   padding: 0.5em;
   line-height: 1em;
@@ -54,15 +63,31 @@
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
-.form button:focus {
+
+button:hover {
+  background-color: lightgreen;
+}
+
+.form input {
+  width: 80%;
+  margin-right: 1%;
+}
+input:focus {
   outline: none;
 }
-.form button:hover {
-  background-color: lightgreen;
+.form button {
+  width: 18%;
+}
+button:focus {
+  outline: none;
 }
 
 .ChatMessagesWrapper {
   background-color: whitesmoke;
+}
+
+.CurrentRoom {
+  font-size: 0.5em;
 }
 
 .ChatMessages {
@@ -98,6 +123,6 @@
 
 @media (max-width: 800px) {
   .App {
-      font-size: 1em;
-    }
+    font-size: 1em;
+  }
 }

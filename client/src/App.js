@@ -10,21 +10,22 @@ const ENDPOINT = "/"; // needs a proxy to node server (this approach avoids CORS
 function App() {
   const [chats, setChats] = useState([]);
   const [currentMessage, setCurrentMessage] = useState("");
+  const [roomNameText, setRoomNameText] = useState("");
+  const [currentRoom, setCurrentRoom] = useState("");
   const refSocket = useRef(null);
 
   useEffect(() => {
-    console.log("useEffect called to setup");
+    console.log("useEffect called to setup socket");
     refSocket.current = socketIOClient(ENDPOINT);
 
     return () => refSocket.current.disconnect();
   }, []);
 
   useEffect(() => {
-    console.log("useEffect called to receive message");
+    console.log("useEffect called to setup listener to receive message");
 
     refSocket.current.on("chat message", (data) => {
       console.log("chat from server: " + data);
-      //console.log(chats);
       setChats((chats) => [
         ...chats,
         { sentMessage: false, messageText: data },
@@ -35,22 +36,39 @@ function App() {
   function newChatMessage(e) {
     e.preventDefault();
 
-    console.log(
-      "newChatMessage: " + currentMessage + currentMessage.length
-    );
-
     if (currentMessage.length > 0) {
-      refSocket.current.emit("chat message", currentMessage);
-      setChats((chats) => [
-        ...chats,
-        { sentMessage: true, messageText: currentMessage },
-      ]);
+      console.log("New Chat Message: " + currentMessage);
+
+      refSocket.current.emit("chat message", currentMessage, (inRoom) => {
+        if (inRoom === true) {
+          // only display message if in a room
+          setChats((chats) => [
+            ...chats,
+            { sentMessage: true, messageText: currentMessage },
+          ]);
+        }
+      });
       setCurrentMessage("");
+    }
+  }
+
+  function joinRoom(e) {
+    e.preventDefault();
+
+    if (roomNameText.length > 0) {
+      console.log("Join Room: " + roomNameText);
+      refSocket.current.emit("join", roomNameText);
+      setCurrentRoom(roomNameText);
+      setRoomNameText("");
     }
   }
 
   function onChangeCurrentMessage(e) {
     setCurrentMessage(e.target.value);
+  }
+
+  function onChangeRoomNameText(e) {
+    setRoomNameText(e.target.value);
   }
 
   function chatList() {
@@ -85,6 +103,17 @@ function App() {
           autoComplete="off"
         />
         <button onClick={(e) => newChatMessage(e)}>Send</button>
+      </div>
+      <div className="JoinRoomWrapper">
+        <div className="CurrentRoom"><b>Current room:</b> {currentRoom}</div>
+        <input
+          type="text"
+          className="roomName"
+          value={roomNameText}
+          onChange={onChangeRoomNameText}
+          onKeyPress={(e) => (e.key === "Enter" ? joinRoom(e) : null)}
+        />
+        <button onClick={(e) => joinRoom(e)}>Join Room</button>
       </div>
     </div>
   );
